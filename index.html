@@ -16,7 +16,7 @@
       margin: 0px;
       padding: 0px;
     }
-    
+
     .esri-item-gallery .esri-item-container {
       float: left;
       text-align: center;
@@ -24,33 +24,33 @@
       width: 204px;
       display: inline-block;
     }
-    
+
     .esri-item-gallery .esri-image {
       width: 200px;
       height: 133px;
       border: 2px solid gray;
       border-radius: 5px;
     }
-    
+
     .esri-item-gallery .esri-null-image {
       line-height: 133px;
       text-align: center;
       color: #999999;
     }
-    
+
     .esri-item-gallery .esri-title {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .esri-item-gallery .esri-null-title {
       color: #999999;
     }
   </style>
-  
+
   <script type="text/javascript">
-    var dojoConfig = { 
+    var dojoConfig = {
       packages: [
         { name: "app",  location: location.pathname.replace(/\/[^/]+$/, "") }
       ]
@@ -63,17 +63,17 @@
     dojo.require("app.OAuthHelper");
 
     dojo.ready(initialize);
-    
+
     var grid;
-    
+
     function initialize() {
       OAuthHelper.init({
-        appId:      "q244Lb8gDRgWQ8hM",
+        appId:      "fcO2dd3jSVNKYnfw",
         portal:     "http://www.arcgis.com",
         expiration: (14 * 24 * 60), // 2 weeks, in minutes
         popup:      false
       });
-      
+
       if (OAuthHelper.isSignedIn()) {
         displayItems();
       }
@@ -83,24 +83,24 @@
         dojo.style(dojo.byId("personalizedPanel"), "display", "none");
       }
     }
-    
+
     function signIn() {
       OAuthHelper.signIn().then(displayItems);
     }
-    
+
     function displayItems() {
       new esri.arcgis.Portal("https://www.arcgis.com").signIn()
-        
+
         .then(function(portalUser) {
           console.log("Signed in to the portal: ", portalUser);
 
           dojo.attr(dojo.byId("userId"), "innerHTML", portalUser.fullName);
           dojo.style(dojo.byId("anonymousPanel"), "display", "none");
           dojo.style(dojo.byId("personalizedPanel"), "display", "block");
-          
+
           queryPortal(portalUser);
         })
-        
+
         .otherwise(function(error) {
           console.log("Error occurred while signing in: ", error);
         });
@@ -108,7 +108,7 @@
 
     function queryPortal(portalUser) {
       var portal = portalUser.portal;
-      
+
       //See list of valid item types here:  http://www.arcgis.com/apidocs/rest/index.html?itemtypes.html
       //See search reference here:  http://www.arcgis.com/apidocs/rest/index.html?searchreference.html
       var queryParams = {
@@ -121,10 +121,10 @@
       portal.queryItems(queryParams)
             .then(createGallery);
     }
-    
+
     function createGallery(items) {
       var htmlFragment = "";
-      
+
       dojo.forEach(items.results, function(item) {
         htmlFragment += (
           "<div class=\"esri-item-container\">" +
@@ -141,7 +141,7 @@
           "</div>"
         );
       });
-      
+
       dojo.byId("itemGallery").innerHTML = htmlFragment;
     }
   </script>
@@ -158,8 +158,8 @@
     &nbsp;-&nbsp;
     <a href="javascript:void(0);" onclick="OAuthHelper.signOut();">Sign Out</a>
   </div>
-  
+
   <div id="itemGallery" class="esri-item-gallery" style="width: 100%;"></div>
-  
+
 </body>
 </html>
